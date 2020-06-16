@@ -311,7 +311,7 @@ void terminate_bro()
 	delete val_mgr;
 
 	// free the global scope
-	pop_scope();
+	zeek::pop_scope();
 
 	reporter = nullptr;
 	}

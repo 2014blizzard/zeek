@@ -21,17 +21,16 @@ class BroFunc;
 ZEEK_FORWARD_DECLARE_NAMESPACED(CallExpr, zeek::detail);
 ZEEK_FORWARD_DECLARE_NAMESPACED(Trigger, zeek::detail::trigger);
 
-namespace zeek::detail {
-using IDPtr = zeek::IntrusivePtr<ID>;
-
-namespace trigger {
-	using TriggerPtr = zeek::IntrusivePtr<Trigger>;
-}
-}
-
 namespace zeek {
 using ValPtr = zeek::IntrusivePtr<Val>;
-}
+
+  namespace detail {
+    using IDPtr = zeek::IntrusivePtr<ID>;
+
+    namespace trigger {
+      using TriggerPtr = zeek::IntrusivePtr<Trigger>;
+    }
+  }
 
 class Frame;
 using FramePtr = zeek::IntrusivePtr<Frame>;
@@ -343,6 +342,10 @@ private:
 	std::unique_ptr<std::vector<BroFunc*>> functions_with_closure_frame_reference;
 };
 
+}
+
+using Frame [[deprecated("Remove in v4.1. Use zeek::Frame instead.")]] = zeek::Frame;
+
 /**
  * If we stopped using this and instead just made a struct of the information
  * that the debugger actually uses we could make the Frame a class a template.
@@ -353,4 +356,4 @@ private:
  * DebugFrame which provides the information that the debugger uses. See:
  * https://stackoverflow.com/a/16211097
  */
-extern std::vector<Frame*> g_frame_stack;
+extern std::vector<zeek::Frame*> g_frame_stack;

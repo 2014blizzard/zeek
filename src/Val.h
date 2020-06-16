@@ -41,7 +41,8 @@ class RE_Matcher;
 
 class CompositeHash;
 class HashKey;
-class Frame;
+
+ZEEK_FORWARD_DECLARE_NAMESPACED(Frame, zeek);
 
 extern double bro_start_network_time;
 

@@ -17,9 +17,10 @@
 #define BRO_PLUGIN_BRO_VERSION BRO_VERSION_FUNCTION
 
 class ODesc;
-class Frame;
 class Func;
 class Event;
+
+ZEEK_FORWARD_DECLARE_NAMESPACED(Frame, zeek);
 
 namespace zeek {
 template <class T> class IntrusivePtr;

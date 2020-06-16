@@ -23,10 +23,17 @@ using BroType [[deprecated("Remove in v4.1. Use zeek::Type instead.")]] = zeek::
 ZEEK_FORWARD_DECLARE_NAMESPACED(ID, zeek::detail);
 
 namespace zeek::detail {
-	class Attr;
-	using AttrPtr = zeek::IntrusivePtr<Attr>;
-	using IDPtr = zeek::IntrusivePtr<ID>;
 }
+
+namespace zeek {
+
+  namespace detail {
+
+    class Attr;
+    using AttrPtr = zeek::IntrusivePtr<Attr>;
+    using IDPtr = zeek::IntrusivePtr<ID>;
+
+  }
 
 class Scope;
 using ScopePtr = zeek::IntrusivePtr<Scope>;
@@ -88,9 +95,6 @@ protected:
 	std::vector<zeek::detail::IDPtr> inits;
 };
 
-
-extern bool in_debug;
-
 // If no_global is true, don't search in the default "global" namespace.
 extern const zeek::detail::IDPtr& lookup_ID(
 	const char* name, const char* module,
@@ -113,3 +117,28 @@ extern Scope* global_scope();
 
 // Current module (identified by its name).
 extern std::string current_module;
+
+}
+
+extern bool in_debug;
+
+using Scope [[deprecated("Remove in v4.1. Use zeek::Scope instead.")]] = zeek::Scope;
+extern std::string& current_module [[deprecated("Remove in v4.1. Use zeek::current_module.")]];
+
+constexpr auto install_ID [[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]] = zeek::install_ID;
+
+// TODO: I'm not sure about these. They may not need aliases. Do plugins ever modify
+// the scope?
+constexpr auto push_scope [[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]] = zeek::push_scope;
+constexpr auto push_existing_scope[[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]] = zeek::push_existing_scope;
+constexpr auto pop_scope [[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]] = zeek::pop_scope;
+constexpr auto current_scope [[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]] = zeek::current_scope;
+constexpr auto global_scope [[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]] = zeek::global_scope;
+
+// Because of the use of default arguments, this function can't be aliased like the rest.
+[[deprecated("Remove in v4.1 Use zeek::lookup_ID instead.")]]
+extern const zeek::detail::IDPtr& lookup_ID(
+  const char* name, const char* module,
+  bool no_global = false,
+  bool same_module_only = false,
+  bool check_export = true);

@@ -240,7 +240,7 @@ void ProfileLogger::Log()
 
 	// Script-level state.
 	unsigned int size, mem = 0;
-	const auto& globals = global_scope()->Vars();
+	const auto& globals = zeek::global_scope()->Vars();
 
 	if ( expensive )
 		{

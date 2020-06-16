@@ -17,8 +17,8 @@
 #include "Val.h"
 #include "ZeekArgs.h"
 
-class Frame;
-class Scope;
+ZEEK_FORWARD_DECLARE_NAMESPACED(Frame, zeek);
+ZEEK_FORWARD_DECLARE_NAMESPACED(Scope, zeek);
 struct function_ingredients;
 
 namespace zeek {

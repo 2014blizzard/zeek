@@ -150,8 +150,8 @@ bool DbgBreakpoint::SetLocation(ParseLocationRec plr, std::string_view loc_str)
 		{
 		std::string loc_s(loc_str);
 		kind = BP_FUNC;
-		function_name = make_full_var_name(current_module.c_str(),
-							loc_s.c_str());
+		function_name = make_full_var_name(zeek::current_module.c_str(),
+						   loc_s.c_str());
 		at_stmt = plr.stmt;
 		const Location* loc = at_stmt->GetLocationInfo();
 		snprintf(description, sizeof(description), "%s at %s:%d",
@@ -350,7 +350,7 @@ void DbgBreakpoint::PrintHitMsg()
 	case BP_LINE:
 		{
 		ODesc d;
-		Frame* f = g_frame_stack.back();
+		zeek::Frame* f = g_frame_stack.back();
 		const BroFunc* func = f->GetFunction();
 
 		if ( func )

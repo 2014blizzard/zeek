@@ -350,7 +350,7 @@ zeek::detail::StmtPtr add_local(
 
 	else
 		{
-		current_scope()->AddInit(std::move(id));
+		zeek::current_scope()->AddInit(std::move(id));
 		return zeek::make_intrusive<zeek::detail::NullStmt>();
 		}
 	}
@@ -568,7 +568,7 @@ void begin_func(zeek::detail::IDPtr id, const char* module_name,
 	else
 		id->SetType(t);
 
-	push_scope(std::move(id), std::move(attrs));
+	zeek::push_scope(std::move(id), std::move(attrs));
 
 	const auto& args = t->Params();
 	int num_args = args->NumFields();
@@ -576,26 +576,26 @@ void begin_func(zeek::detail::IDPtr id, const char* module_name,
 	for ( int i = 0; i < num_args; ++i )
 		{
 		zeek::TypeDecl* arg_i = args->FieldDecl(i);
-		auto arg_id = lookup_ID(arg_i->id, module_name);
+		auto arg_id = zeek::lookup_ID(arg_i->id, module_name);
 
 		if ( arg_id && ! arg_id->IsGlobal() )
 			arg_id->Error("argument name used twice");
 
-		arg_id = install_ID(arg_i->id, module_name, false, false);
+		arg_id = zeek::install_ID(arg_i->id, module_name, false, false);
 		arg_id->SetType(arg_i->type);
 
 		if ( prototype )
 			arg_id->SetOffset(prototype->offsets[i]);
 		}
 
-	if ( zeek::detail::Attr* depr_attr = find_attr(current_scope()->Attrs().get(),
+	if ( zeek::detail::Attr* depr_attr = find_attr(zeek::current_scope()->Attrs().get(),
 	                                               zeek::detail::ATTR_DEPRECATED) )
-		current_scope()->GetID()->MakeDeprecated(depr_attr->GetExpr());
+		zeek::current_scope()->GetID()->MakeDeprecated(depr_attr->GetExpr());
 	}
 
 class OuterIDBindingFinder : public TraversalCallback {
 public:
-	OuterIDBindingFinder(Scope* s)
+	OuterIDBindingFinder(zeek::Scope* s)
 		{
 		scopes.emplace_back(s);
 		}
@@ -603,7 +603,7 @@ public:
 	TraversalCode PreExpr(const zeek::detail::Expr*) override;
 	TraversalCode PostExpr(const zeek::detail::Expr*) override;
 
-	std::vector<Scope*> scopes;
+	std::vector<zeek::Scope*> scopes;
 	std::vector<const zeek::detail::NameExpr*> outer_id_references;
 };
 
@@ -644,7 +644,7 @@ TraversalCode OuterIDBindingFinder::PostExpr(const zeek::detail::Expr* expr)
 
 void end_func(zeek::detail::StmtPtr body)
 	{
-	auto ingredients = std::make_unique<function_ingredients>(pop_scope(), std::move(body));
+	auto ingredients = std::make_unique<function_ingredients>(zeek::pop_scope(), std::move(body));
 
 	if ( ingredients->id->HasVal() )
 		ingredients->id->GetVal()->AsFunc()->AddBody(
@@ -677,7 +677,7 @@ Val* internal_val(const char* name)
 	return zeek::id::find_val(name).get();
 	}
 
-id_list gather_outer_ids(Scope* scope, zeek::detail::Stmt* body)
+id_list gather_outer_ids(zeek::Scope* scope, zeek::detail::Stmt* body)
 	{
 	OuterIDBindingFinder cb(scope);
 	body->Traverse(&cb);

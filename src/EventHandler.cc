@@ -31,8 +31,8 @@ const zeek::FuncTypePtr& EventHandler::GetType(bool check_export)
 	if ( type )
 		return type;
 
-	const auto& id = lookup_ID(name.data(), current_module.c_str(), false, false,
-	                           check_export);
+	const auto& id = zeek::lookup_ID(name.data(), zeek::current_module.c_str(), false, false,
+	                                 check_export);
 
 	if ( ! id )
 		return zeek::FuncType::nil;
